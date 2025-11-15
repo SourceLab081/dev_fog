@@ -93,45 +93,42 @@ ODM_MANIFEST_C3QN_FILES := $(DEVICE_PATH)/configs/hidl/manifest_c3qn.xml
 TARGET_INIT_VENDOR_LIB := //$(DEVICE_PATH):libinit_fog
 TARGET_RECOVERY_DEVICE_MODULES := libinit_fog
 
-# Kernel
-BOARD_KERNEL_BASE        := 0x00000000
-BOARD_KERNEL_IMAGE_NAME  := Image
-BOARD_KERNEL_OFFSET      := 0x00008000
-BOARD_KERNEL_PAGESIZE    := 4096
-BOARD_RAMDISK_OFFSET     := 0x01000000
-BOARD_TAGS_OFFSET        := 0x00000100
+BOARD_INCLUDE_DTB_IN_BOOTIMG := true
+BOARD_KERNEL_SEPARATED_DTBO := true
+
+BOARD_BOOT_HEADER_VERSION := 3
+BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
+BOARD_RAMDISK_USE_LZ4 := true
 
 BOARD_KERNEL_CMDLINE += \
-    androidboot.console=ttyMSM0 \
-    androidboot.fstab_suffix=qcom \
-    androidboot.init_fatal_reboot_target=recovery \
     androidboot.hardware=qcom \
     androidboot.memcg=1 \
     androidboot.usbcontroller=4e00000.dwc3 \
-    console=ttyMSM0,115200n8 \
+    cgroup.memory=nokmem,nosocket \
+    console=tty0,115200n8 \
     earlycon=msm_geni_serial,0x4a90000 \
     loop.max_part=7 \
     lpm_levels.sleep_disabled=1 \
     msm_rtb.filter=0x237 \
     service_locator.enable=1 \
+    video=vfb:640x400,bpp=32,memsize=3072000 \
     swiotlb=2048 \
-    kpti=off \
-    cgroup_disable=pressure
+    selinux=1 \
+    audit=0 \
+    elevator=maple
 
-BOARD_BOOT_HEADER_VERSION := 3
-BOARD_KERNEL_SEPARATED_DTBO := true
-BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
-BOARD_MKBOOTIMG_ARGS += --dtb $(DEVICE_PATH)-kernel/dtb.img
-
-BOARD_KERNEL_SEPARATED_DTBO := true
-BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)-kernel/dtbo.img
-BOARD_RAMDISK_USE_LZ4 := true
-
-TARGET_FORCE_PREBUILT_KERNEL := true
+TARGET_KERNEL_ADDITIONAL_FLAGS += HOSTCFLAGS="-fuse-ld=lld -Wno-unused-command-line-argument"
+NEED_KERNEL_MODULE_SYSTEM := true
 TARGET_KERNEL_ARCH := arm64
-TARGET_KERNEL_CONFIG := vendor/bengal_defconfig
+TARGET_KERNEL_CLANG_COMPILE := true
+#TARGET_KERNEL_ADDITIONAL_FLAGS += LD=ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump
+#TARGET_KERNEL_CLANG_PATH := prebuilts/yuki-clang
+#TARGET_KERNEL_CLANG_VERSION := 18
+#KERNEL_CLANG_TRIPLE := aarch64-linux-gnu-
+TARGET_KERNEL_CONFIG := vendor/fog-hybris_defconfig
 TARGET_KERNEL_HEADERS := kernel/xiaomi/fog
 TARGET_KERNEL_SOURCE := kernel/xiaomi/fog
+TARGET_LINUX_KERNEL_VERSION := 4.19
 
 # Media
 TARGET_DISABLED_UBWC := true
