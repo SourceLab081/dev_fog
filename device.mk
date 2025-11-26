@@ -251,7 +251,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/init/init.recovery.qcom.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.qcom.rc
 
 # qcom/common tree
-$(call inherit-product, device/qcom/common/common.mk)
+#$(call inherit-product, device/qcom/common/common.mk)
 TARGET_BOARD_PLATFORM := bengal
 TARGET_USE_BENGAL_HALS := true
 TARGET_USES_PN5XX_HAL := true
