@@ -182,7 +182,7 @@ TARGET_VENDOR_PROP += $(DEVICE_PATH)/configs/props/vendor.prop
 
 
 # qcom/common tree
-include $(QCOM_COMMON_PATH)/BoardConfigQcom.mk
+#include $(QCOM_COMMON_PATH)/BoardConfigQcom.mk
 OVERRIDE_QCOM_HARDWARE_VARIANT := bengal
 
 # Releasetools
